@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <!-- Title -->
+    <title>Water refills</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'img/core-img/favicon.ico' %}">
+
+    <!-- Core Stylesheet -->
+    <link href="{% static 'style.css' %}" rel="stylesheet">
+
+    <!-- Responsive CSS -->
+    <link href="{% static 'css/responsive.css' %}" rel="stylesheet">
+
+</head>
+<body>
+    <!-- Top Bar-->
+    {% include 'partials/_topbar.html' %}
+    <!-- Nav Bar-->
+    {% include 'partials/_welcome.html' %}
+    <!-- Main content-->
+    {% block content %} {% endblock %}
+
+    <!-- Footer -->
+    {% include 'partials/_footer.html' %}
+    
+    <!-- Jquery-2.2.4 JS -->
+    <script src="{% static 'js/jquery-2.2.4.min.js' %}"></script>
+    <!-- Popper js -->
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <!-- Bootstrap-4 Beta JS -->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- All Plugins JS -->
+    <script src="{% static 'js/plugins.js' %}"></script>
+    <!-- Slick Slider Js-->
+    <script src="{% static 'js/slick.min.js' %}"></script>
+    <!-- Footer Reveal JS -->
+    <script src="{% static 'js/footer-reveal.min.js' %}"></script>
+    <!-- Active JS -->
+    <script src="{% static 'js/active.js' %}"></script>
+</body>
+
+</html>
