@@ -6,12 +6,13 @@
                 <div class="wellcome-heading">
                     <h2>Refills</h2>
                     <h3>🚰</h3>
-                    <p>How we use water</p>
+                    <p>Enter the water bottles saved number from the fountain</p>
                 </div>
                 <div class="get-start-area">
                     <!-- Form Start -->
-                    <form action="#" method="post" class="form-inline">
-                        <input type="number" class="form-control email" placeholder="123456">
+                    <form action="{% url 'new' %}" method="post" class="form-inline">
+                        {% csrf_token %}
+                        <input type="number" name="datapoint" class="form-control email" placeholder="123456">
                         <input type="submit" class="submit" value="Enter">
                     </form>
                     <!-- Form End -->
