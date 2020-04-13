@@ -1,3 +1,6 @@
+{% load static %}
+<script src="{% static 'js/graph.js' %}"></script>
+
 <!-- ***** Graph Area Start ***** -->
 <section class="special-area bg-white section_padding_100" id="graphs">
     <div class="container">
@@ -14,32 +17,24 @@
         <div class="col">
             <!-- Single Graph Area -->
             <div class="col-12">
+                <canvas id="g1" class="single-special text-center wow fadeInUp" data-wow-delay="0.2s"></canvas>
                 <script>
-                    d3.select('#g1').append("svg").attr("viewBox", [0, 0, width, height]).text("THIS IS A TEST");
+                    graph("All Time", "all_data", null, 'g1');
                 </script>
-                <div id="g1" class="single-special text-center wow fadeInUp" data-wow-delay="0.2s">
-                    
-                </div>
             </div>
             <!-- Single Graph Area -->
             <div class="col-12">
-                <div class="single-special text-center wow fadeInUp" data-wow-delay="0.4s">
-                  <div class="single-icon">
-                      <i class="ti-calendar" aria-hidden="true"></i>
-                  </div>
-                  <h4>Graph 2</h4>
-                  <p>Weekly</p>
-                </div>
+                <canvas id="g2" class="single-special text-center wow fadeInUp" data-wow-delay="0.2s"></canvas>
+                <script>
+                    graph("This week", "week", null, 'g2');
+                </script>
             </div>
             <!-- Single Graph Area -->
             <div class="col-12">
-                <div class="single-special text-center wow fadeInUp" data-wow-delay="0.6s">
-                  <div class="single-icon">
-                      <i class="ti-calendar" aria-hidden="true"></i>
-                  </div>
-                  <h4>Graph 3</h4>
-                  <p>Monthly</p>
-                </div>
+                <canvas id="g3" class="single-special text-center wow fadeInUp" data-wow-delay="0.2s"></canvas>
+                <script>
+                    graph("This Month", "month", 'month={% now "Y-m" %}', 'g3');
+                </script>
             </div>
         </div>
     </div>
