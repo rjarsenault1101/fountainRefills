@@ -19,21 +19,24 @@
             <div class="col-12">
                 <canvas id="g1" class="single-special text-center wow fadeInUp" data-wow-delay="0.2s"></canvas>
                 <script>
-                    graph("All Time", "all_data", null, 'g1');
+                    var data = parseJSON("{{ allData }}");
+                    makegraph("All Time", data, 'g1');
                 </script>
             </div>
             <!-- Single Graph Area -->
             <div class="col-12">
                 <canvas id="g2" class="single-special text-center wow fadeInUp" data-wow-delay="0.2s"></canvas>
                 <script>
-                    graph("This week", "week", null, 'g2');
+                    var week=parseJSON("{{ thisWeek }}");
+                    makegraph("This week", week , 'g2');
                 </script>
             </div>
             <!-- Single Graph Area -->
             <div class="col-12">
                 <canvas id="g3" class="single-special text-center wow fadeInUp" data-wow-delay="0.2s"></canvas>
                 <script>
-                    graph("This Month", "month", 'month={% now "Y-m" %}', 'g3');
+                    var month = parseJSON("{{ thisMonth }}");
+                    makegraph("This Month", month, 'g3');
                 </script>
             </div>
         </div>

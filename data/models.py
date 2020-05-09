@@ -7,6 +7,9 @@ class Datapoint(models.Model):
     date = models.TextField(default=datetime.date(datetime.now()), blank=False)
     time = models.TextField(default=datetime.time(datetime.now()), blank=False)
     value = models.BigIntegerField(blank=False)
+    cumulative = models.BigIntegerField(blank=False)
+
     # Add in a 'which fountain button'? 
     def __str__(self):
         return str(self.value)+ "," + self.timestamp
+    pass

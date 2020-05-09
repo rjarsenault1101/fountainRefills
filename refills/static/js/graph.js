@@ -1,13 +1,15 @@
-var BASE_URL="http://localhost:8000/";
-function graph(name, endpoint, parameters, element) {
-    var request = new XMLHttpRequest()
-    request.open('GET', BASE_URL + endpoint + (parameters? "?" + parameters : ""))
-    request.onload = function() {
-        makegraph(name, JSON.parse(this.response), element)
-    }
-    request.send()
+function parseJSON(jsonString) {
+    return JSON.parse(jsonString.replace(/&quot;/g,'"'));
 }
 
+function daytotal(data) {
+    for(i = 0; i<Object.keys(data).length; i++) {
+        if(i != 0) {
+            data[i].value = data[i].value - data[i-1].value
+            console.log(data[i].value)
+        }
+    }
+}
 function makegraph(name, data, element) {
     var labels;
     if(data[0].timestamp){

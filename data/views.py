@@ -2,27 +2,69 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from .models import Datapoint as dp
 from datetime import datetime, timedelta
-from django.db.models import Count, Avg
+from django.db.models import Count, Avg, Sum
+import json
 def index(request): 
     context = {
-        'data': list(dp.objects.order_by('-id').all().values('value', 'timestamp'))
+        'allData': getAllData(),
+        'thisWeek': getThisWeek(), 
+        'thisMonth': getThisMonth(),
+        'totalPoints': dp.objects.all().count(),
+        'pointsToday': dp.objects.filter(date=datetime.today().strftime("%Y-%m-%d")).count(),
+        'dailyAverage': dailyAverage()
     }
     return render(request, 'pages/index.html', context)
 
+def getAllData():
+    data = list(dp.objects.order_by('-id').values('timestamp', 'value'))
+    return json.dumps(data)
+
+def dailyAverage():
+    
+    data = list(dp.objects.order_by('date').values('date').annotate(total = Count('date')).values('total'))
+    print(data)
+    avg = getAverage(data)
+    print(avg)
+    return avg
+
+def getAverage(data):
+    sum = 0
+    for element in data:
+        sum+=element['total']
+
+    return sum/len(data)
+
+def getThisWeek():
+    today = datetime.date(datetime.now())
+    week_ago = today - timedelta(days=7)
+    data = list(dp.objects.order_by('-id').filter(date__range=[week_ago, today]).values())
+    return json.dumps(data)
+
+def getThisMonth(): 
+    today=datetime.today()
+    month = today.strftime("%Y-%m")
+    data = list(dp.objects.order_by('date').filter(timestamp__istartswith=month).values('date').annotate(value = Sum('value')))
+    return json.dumps(data)
+    pass
 def new_data(request):
     if request.method == 'POST':
-        data = request.POST['datapoint']
+        # Potential race condition. this method may need to be synchronized in some way.
+        previous = 0
+        all = list(dp.objects.order_by('-id').all())
+        if len(all) > 0: 
+            previous = all[0].cumulative
+            print(previous)
+        cumulative = request.POST['datapoint']
+        value = int(cumulative) - previous
         #if data < dp.objects.order_by('-id')[0]['value']:
         timestamp = datetime.now()
-        datapoint = dp(timestamp=timestamp, date=datetime.date(timestamp), time=datetime.time(timestamp), value=data)
+        datapoint = dp(timestamp=timestamp, date=datetime.date(timestamp), time=datetime.time(timestamp), value=value, cumulative=cumulative)
         datapoint.save()
     return redirect('index')
 
-def get_data(request):
-    if request.method == 'GET': 
-        # Filter by month/day here? 
-        data = list(dp.objects.order_by('-id').all().values())
-        return JsonResponse(data, safe=False)
+def get_data(request): 
+    
+    return render(request, 'index.html', context)
 
 def get_day(request):
     if  request.method == 'GET': 
@@ -39,15 +81,15 @@ def get_week(request):
         # else:
         today = datetime.date(datetime.now())
         week_ago = today - timedelta(days=7)
-        print("TEST")
         data = list(dp.objects.order_by('-id').filter(date__range=[week_ago, today]).values())
-        print(data)
         return JsonResponse(data, safe=False)
 
 def get_month(request):
     if request.method == 'GET': 
         # YYYY-mm
         month = request.GET['month']
+        #print(dp.objects.order_by('date').filter(timestamp__istartswith=month).values('date').annotate(value = Avg('value')).query)
+        # Find how much exactly in a day. Diff between the day before. 
         data = list(dp.objects.order_by('date').filter(timestamp__istartswith=month).values('date').annotate(value = Avg('value')))
         return JsonResponse(data, safe=False)
 
