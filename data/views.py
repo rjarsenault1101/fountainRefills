@@ -16,7 +16,8 @@ def index(request):
     return render(request, 'pages/index.html', context)
 
 def getAllData():
-    data = list(dp.objects.order_by('-id').values('timestamp', 'value'))
+    data = list(dp.objects.order_by('id').values('timestamp', 'value'))
+    print(data)
     return json.dumps(data)
 
 def dailyAverage():

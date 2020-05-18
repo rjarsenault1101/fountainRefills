@@ -11,14 +11,16 @@ function daytotal(data) {
     }
 }
 function makegraph(name, data, element) {
+    console.log(name);
     var labels;
     if(data[0].timestamp){
-        labels = data.map((item) => new Date(item.timestamp))
+        labels = data.map((item) => item.timestamp);
     } else if (data[0].date) {
         labels = data.map((item) => item.date);
     } else {
         labels = null;
     }
+    console.log(labels);
     var values = data.map((item) => item.value);
     var ctx = document.getElementById(element).getContext('2d');
     var chart = new Chart(ctx, {
@@ -44,16 +46,6 @@ function makegraph(name, data, element) {
                     ticks: {
                         beginAtZero: true
                     }
-                }],
-                
-                xAxes: [{
-                    type: 'time',
-                    distribution: 'linear',
-                    time: {
-                        displayFormats: {
-                            day: 'll h:mm a'                              }
-                    }
-                    
                 }]
             }
         }
